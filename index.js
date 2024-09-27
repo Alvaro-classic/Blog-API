@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 
 const app = express();
 const port = 4000;
+const today = new Date();
 
 // In-memory data store
 let posts = [
@@ -53,7 +54,18 @@ app.get("/posts/:id", (req, res) =>{
 })
 
 //CHALLENGE 3: POST a new post
-
+app.post("/posts", (req, res) =>{
+  lastId ++;
+  const newPost = {
+      id: lastId,
+      title: req.body.title,
+      content: req.body.content,
+      author: req.body.author,
+      date: today,
+  }
+  posts.push(newPost);
+  res.json(newPost)
+})
 
 //CHALLENGE 4: PATCH a post when you just want to update one parameter
 app.patch("/posts/:id", (req, res) =>{
@@ -65,7 +77,7 @@ app.patch("/posts/:id", (req, res) =>{
     title: req.body.title || actualPost.title,
     content: req.body.content || actualPost.content,
     author: req.body.author || actualPost.author,
-    date: actualPost.date,
+    date: actualPost.date
   }
   posts[postIndex] = updatedPost;
   res.json(posts[postIndex])
